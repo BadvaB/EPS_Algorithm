@@ -209,7 +209,7 @@ int EPS_Conditioning()
 
 	//TIME OUT TO STATE
 	if (CheckTimeOut()) {
-		ChangeState(state + 1); //moving up
+		ChangeState(state - 1); //moving up //FIXME - maybe opposite
 	}
 
 	Duty_Cycle_implement();
