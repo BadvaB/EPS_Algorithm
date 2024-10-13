@@ -13,9 +13,9 @@ int main() {
 	printf("Enter the output file name (add '.txt' at the end!!!): ");
 	res = scanf("%1024s", file_path_outputs);
 	EPS_Init();
-	GetSimParams(); //FIXME - update the first line of the sim input and the function before using!
-	int dur = params[0];
-	update_Duty_Cycle_DC_time(params[1]);
+	int dur = GetSimParams(); //FIXME - update the first line of the sim input and the function before using!
+	//int dur = params[0];
+	//update_Duty_Cycle_DC_time(params[1]);
 	res = 0;
 	printf("starting!\n");
 	for (int i = 0; i < dur; i++) {

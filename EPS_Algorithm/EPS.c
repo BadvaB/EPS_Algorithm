@@ -84,24 +84,6 @@ DutyCycle4Mode DutyCycleCriticalMode;
 
 DutyCycle4Mode currentDutyCycle;
 
-//updateDutyCycle(DutyCycleFullMode_WC, DEFAULT_DUTY_CYCLE_TABLE_WORST_CASE_FULL_MODE);
-//updateDutyCycle(DutyCycleNormalMode_WC, DEFAULT_DUTY_CYCLE_TABLE_WORST_CASE_NORMAL_MODE);
-//updateDutyCycle(DutyCycleSafeMode_WC, DEFAULT_DUTY_CYCLE_TABLE_WORST_CASE_SAFE_MODE);
-//updateDutyCycle(DutyCycleCriticalMode_WC, DEFAULT_DUTY_CYCLE_TABLE_WORST_CASE_CRITICAL_MODE);
-//
-//updateDutyCycle(DutyCycleFullMode_AVG, DEFAULT_DUTY_CYCLE_TABLE_AVERAGE_CASE_FULL_MODE);
-//updateDutyCycle(DutyCycleNormalMode_AVG, DEFAULT_DUTY_CYCLE_TABLE_AVERAGE_CASE_NORMAL_MODE);
-//updateDutyCycle(DutyCycleSafeMode_AVG, DEFAULT_DUTY_CYCLE_TABLE_AVERAGE_CASE_SAFE_MODE);
-//updateDutyCycle(DutyCycleCriticalMode_AVG, DEFAULT_DUTY_CYCLE_TABLE_AVERAGE_CASE_CRITICAL_MODE);
-//
-//updateDutyCycle(DutyCycleFullMode, DEFAULT_DUTY_CYCLE_TABLE_WORST_CASE_FULL_MODE);
-//updateDutyCycle(DutyCycleNormalMode, DEFAULT_DUTY_CYCLE_TABLE_WORST_CASE_NORMAL_MODE);
-//updateDutyCycle(DutyCycleSafeMode, DEFAULT_DUTY_CYCLE_TABLE_WORST_CASE_SAFE_MODE);
-//updateDutyCycle(DutyCycleCriticalMode, DEFAULT_DUTY_CYCLE_TABLE_WORST_CASE_CRITICAL_MODE);
-//
-//updateDutyCycle(currentDutyCycle, DEFAULT_DUTY_CYCLE_TABLE_WORST_CASE_CRITICAL_MODE);
-// 
-
 
 FILE* openFile(FILE* file, char file_path[]) {
 	errno_t err = fopen_s(&file, file_path, "r");
@@ -132,10 +114,7 @@ int line2params() {
 int GetBatteryVoltage(int* vbatt)
 {
 	int volt_eps = params[0];
-	//if (logError(GomEpsGetHkData_param(0, &myEpsTelemetry_param), "GetBatteryVoltage-GomEPS-EPS_TelemetryHKParam"))return -1;
-
 	*vbatt = volt_eps;
-
 	return 0;
 }
 
@@ -253,10 +232,6 @@ int UpdateAlpha(double new_alpha)
 	return 0;
 }
 
-//int UpdateThresholdVoltages(EpsThreshVolt_t* thresh_volts)
-//{
-//}
-
 // check: what happens first time when there are no values in the FRAM
 int GetThresholdVoltages(EpsThreshVolt_t thresh_volts[NUMBER_OF_THRESHOLD_VOLTAGES])
 {
@@ -339,7 +314,6 @@ int PrintParams() {
 	fprintf(outputs, "DutyCycle.Payload_DC:%d\t", currentDutyCycle.Payload_DC);
 	fprintf(outputs, "flag_payload_ON:%d\t", flag_payload_ON); // indicate if the component is on or off
 	fprintf(outputs, "start_mode_time:%u\t", start_mode_time);
-	//fprintf(outputs, "g_system_state:%u\t", g_system_state);
 	fprintf(outputs, "g_low_volt_flag:%d\t", g_low_volt_flag);
 	fprintf(outputs, "flag_beacon_ON:%d\t", flag_beacon_ON); // indicate if the component is on or off
 	fprintf(outputs, "change_avg_wc_dc_table:%d\t", change_avg_wc_dc_table);
@@ -409,13 +383,17 @@ int GetSimParams() {
 	fgets(line, sizeof(line), inputs);
 	char* token;
 	int i = 0;
+	float new_alpha_user;
 	token = strtok(line, "\t");
 	while (token != NULL && i < MAX_NUMBERS) {
 		params[i] = atoi(token);
 		i++;
 		token = strtok(NULL, "\t");
 	}
-	return 0;
+	update_Duty_Cycle_DC_time(params[1]);
+	new_alpha_user = (float)params[2] / 100.0;
+	UpdateAlpha(new_alpha_user);
+	return params[0]; //duration
 }
 
 
