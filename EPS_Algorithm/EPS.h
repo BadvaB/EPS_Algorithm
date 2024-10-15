@@ -46,7 +46,7 @@
   // FIXME - define time outs
 #define DEFAULT_TIME_OUT_NORMAL 500 //21600 // [sec], 360 minutes - 4 revs
 #define DEFAULT_TIME_OUT_SAFE 300 //16200 // [sec], 270 minutes - 3 revs
-#define DEFAULT_TIME_OUT_CRITICAL 200 //10800 // [sec], 180 minutes - 2 revs
+#define DEFAULT_TIME_OUT_CRITICAL 250 //10800 // [sec], 180 minutes - 2 revs
 
 #define DUTY_CYCLE_TIME 5400 // [sec], 90 minutes - 1 rev
 

@@ -17,6 +17,8 @@ int main() {
 	//int dur = params[0];
 	//update_Duty_Cycle_DC_time(params[1]);
 	res = 0;
+	fprintf(outputs, "input file path: ");
+	fprintf(outputs, "%s\n", file_path_inputs);
 	printf("starting!\n");
 	for (int i = 0; i < dur; i++) {
 		if (i % 100 == 0) {

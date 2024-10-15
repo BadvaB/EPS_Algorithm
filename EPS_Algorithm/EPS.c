@@ -31,8 +31,8 @@ const int DEFAULT_DUTY_CYCLE_TABLE_AVERAGE_CASE_NORMAL_MODE[NUNBER_OF_COMPONENT]
 const int DEFAULT_DUTY_CYCLE_TABLE_AVERAGE_CASE_SAFE_MODE[NUNBER_OF_COMPONENT] = { 100, 15, 1, 100, 100, 50, 1, 100 };
 const int DEFAULT_DUTY_CYCLE_TABLE_AVERAGE_CASE_CRITICAL_MODE[NUNBER_OF_COMPONENT] = { 100, 15, 0, 100, 100, 0, 0, 100 };
 const int DEFAULT_DUTY_CYCLE_TABLE_WORST_CASE_FULL_MODE[NUNBER_OF_COMPONENT] = { 100, 0, 8, 100, 100, 100, 1, 100 };
-const int DEFAULT_DUTY_CYCLE_TABLE_WORST_CASE_NORMAL_MODE[NUNBER_OF_COMPONENT] = { 100, 0, 7, 100, 100, 85, 1, 100 };
-const int DEFAULT_DUTY_CYCLE_TABLE_WORST_CASE_SAFE_MODE[NUNBER_OF_COMPONENT] = { 100, 0, 5, 100, 100, 50, 1, 100 };
+const int DEFAULT_DUTY_CYCLE_TABLE_WORST_CASE_NORMAL_MODE[NUNBER_OF_COMPONENT] = { 100, 0, 7, 100, 100, 80, 1, 100 };
+const int DEFAULT_DUTY_CYCLE_TABLE_WORST_CASE_SAFE_MODE[NUNBER_OF_COMPONENT] = { 100, 0, 5, 100, 100, 45, 1, 100 };
 const int DEFAULT_DUTY_CYCLE_TABLE_WORST_CASE_CRITICAL_MODE[NUNBER_OF_COMPONENT] = { 100, 0, 1, 100, 100, 0, 0, 100 };
 
 
@@ -58,6 +58,7 @@ unsigned int curr_time = 0;
 unsigned int state_time_out = 10800; //FIXME - change to DEFAULT_TIME_OUT_SAFE when its allowed
 // FIXME - new array for follow the states changes
 unsigned int state_change_arr[STATE_CHANGE_ARR_MAX];
+unsigned int state_change_time_threshold = STATE_CHANGE_TIME_TRSH;
 unsigned int state_change_count = 0;
 unsigned int state_change_counter = 0;
 // FIXME - new parameters for the DC Duty Cycle table changes
@@ -163,7 +164,7 @@ int EPS_Conditioning()
 	params[0]= atoi(line);
 
 	//UPDATE DUTY CYCLES DC
-	if (Count_StateChange()) { // if there were a lot of state changes
+	if (Count_StateChange()==1) { // if there were a lot of state changes
 		if (!change_avg_wc_dc_table) {
 			UpdateDutyCycleTable_WorstOrAverage(false); //FIXME change to WC DC table
 			change_avg_wc_dc_table = true;
@@ -195,7 +196,7 @@ int EPS_Conditioning()
 		}
 
 	}
-	else if (filtered_voltage > prev_avg) {
+	if (filtered_voltage > prev_avg) {
 		if (filtered_voltage > eps_threshold_voltages.Vup_full) {
 			EnterFullMode();
 		}
@@ -209,7 +210,7 @@ int EPS_Conditioning()
 
 	//TIME OUT TO STATE
 	if (CheckTimeOut()) {
-		ChangeState(state - 1); //moving up //FIXME - maybe opposite
+		ChangeState(state + 1); //moving up //FIXME - maybe opposite
 	}
 
 	Duty_Cycle_implement();
@@ -219,7 +220,7 @@ int EPS_Conditioning()
 	time_taken = time_taken *1000.0; // new its in ms and not second
 	PrintParams();
 	curr_time++;
-	prev_avg = filtered_voltage;
+	prev_avg = filtered_voltage+1;
 	return 0;
 }
 
@@ -393,6 +394,9 @@ int GetSimParams() {
 	update_Duty_Cycle_DC_time(params[1]);
 	new_alpha_user = (float)params[2] / 100.0;
 	UpdateAlpha(new_alpha_user);
+	if (params[3] != 0) {
+		state_change_time_threshold = params[3];
+	}
 	return params[0]; //duration
 }
 

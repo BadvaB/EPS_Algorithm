@@ -9,7 +9,7 @@
 
 //FIXME define number of 
 #define STATE_CHANGE_ARR_MAX 	 6
-#define STATE_CHANGE_TIME_TRSH 	 5400 // [sec], 90 minutes - 1 rev
+#define STATE_CHANGE_TIME_TRSH 	 1300 //5400 // [sec], 90 minutes - 1 rev
 
 typedef enum {
 	CriticalMode,
@@ -27,6 +27,7 @@ extern unsigned int start_mode_time;
 extern unsigned int curr_time;
 extern unsigned int state_time_out;
 extern unsigned int state_change_arr[STATE_CHANGE_ARR_MAX];
+extern unsigned int state_change_time_threshold;
 extern unsigned int state_change_count;
 extern unsigned int state_change_counter;
 extern bool change_avg_wc_dc_table;

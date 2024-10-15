@@ -113,7 +113,7 @@ int Count_StateChange() { //FIXME - new function that returns if there were a lo
 	unsigned int idx_arr = min(state_change_count, STATE_CHANGE_ARR_MAX), i = 0;
 	state_change_counter = 0;
 	for (i = 0; i < idx_arr; i++) {
-		if (curr_time - state_change_arr[i] < STATE_CHANGE_TIME_TRSH) {
+		if (curr_time - state_change_arr[i] < state_change_time_threshold) {
 			state_change_counter++;
 		}
 		if (state_change_counter == STATE_CHANGE_ARR_MAX) {
