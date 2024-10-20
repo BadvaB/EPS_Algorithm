@@ -42,6 +42,7 @@
 #define NUMBER_OF_SOLAR_PANELS			6
 #define NUMBER_OF_THRESHOLD_VOLTAGES 	6 		///< first 3 are charging voltages, last 3 are discharging voltages
 #define NUNBER_OF_COMPONENT 8
+#define MAX_NUMBERS 10  // מקסימום מספרים בשורה
 
   // FIXME - define time outs
 #define DEFAULT_TIME_OUT_NORMAL 500 //21600 // [sec], 360 minutes - 4 revs
@@ -65,8 +66,6 @@ extern double alpha;
 extern unsigned int NormalMode_TimeOut;
 extern unsigned int SafeMode_TimeOut;
 extern unsigned int CriticalMode_TimeOut;
-extern clock_t avg_time;
-extern clock_t prev_avg_time;
 
 extern unsigned int Duty_Cycle_DC_time;
 extern bool flag_payload_ON;
@@ -75,7 +74,7 @@ extern bool flag_beacon_ON;
 extern FILE* inputs;
 extern FILE* outputs;
 extern char line[MAX_LINE];
-extern int params[MAX_LINE];
+extern int params[MAX_NUMBERS];
 extern char file_name[MAX_LINE];
 extern char file_path_inputs[MAX_LINE];
 extern char file_path_outputs[MAX_LINE];

@@ -10,7 +10,6 @@
 #include "EPS.h"
 #include "EPSOperationModes.h"
 
-#define MAX_NUMBERS 10  // מקסימום מספרים בשורה
 
 // y[i] = a * x[i] +(1-a) * y[i-1]
 int prev_avg = 0;		// y[i-1]
@@ -43,7 +42,7 @@ bool flag_beacon_ON = false;
 FILE* inputs = NULL;
 FILE* outputs = NULL;
 char line[MAX_LINE];
-int params[MAX_LINE] = { 0 };
+int params[MAX_NUMBERS] = { 0 };
 char file_path_inputs[MAX_LINE] = INPUTFILE;
 char file_path_outputs[MAX_LINE] = OUTPUTFILE;
 
@@ -396,6 +395,15 @@ int GetSimParams() {
 	UpdateAlpha(new_alpha_user);
 	if (params[3] != 0) {
 		state_change_time_threshold = params[3];
+	}
+	if (params[4] != 0) {
+		UpdateTimeOut_NormalMode(params[4]);
+	}
+	if (params[5] != 0) {
+		UpdateTimeOut_SafeMode(params[5]);
+	}
+	if (params[6] != 0) {
+		UpdateTimeOut_CriticalMode(params[6]);
 	}
 	return params[0]; //duration
 }

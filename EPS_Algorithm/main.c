@@ -36,5 +36,8 @@ int main() {
 		printf("Current working directory: %s\n", cwd);
 	}
 	printf("output file location: %s\\%s\n", cwd, file_path_outputs);
+	printf("Press any key to exit..");
+	res = scanf("%1024s", file_path_outputs);
 	return 0;
+
 }
