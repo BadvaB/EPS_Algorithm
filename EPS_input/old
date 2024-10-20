@@ -1,0 +1,72 @@
+import pandas as pd
+import os
+# This is a sample Python script.
+
+# Press Shift+F10 to execute it or replace it with your code.
+# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+
+
+# def print_hi(name):
+#     # Use a breakpoint in the code line below to debug your script.
+#     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+
+
+# Press the green button in the gutter to run the script.
+# if __name__ == '__main__':
+#     print_hi('PyCharm')
+
+# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+# בקשה מהמשתמש להכניס את שלושת הקלטים
+name = input("enter run name (name+date):")
+duration = input("enter run duration:")
+duration = int(duration)
+DC_duration = input(f"enter Duty Cycle duration (between 2 to {duration}):")
+DC_duration = max(2, min(int(DC_duration), duration))
+change_voltage = input("do you want linear voltage changes? [y/n]")
+if (change_voltage == 'y') or (change_voltage == 'Y'):
+    change_voltage = 1 #true
+else:
+    change_voltage = 0 #false
+num_change = input("enter the number of changes:")
+changes = []
+V_target = 8
+total_time_left = duration
+for x in range(int(num_change)):
+    if (x==0) or (change_voltage == 0):
+        V_change = input(f"enter V for change #{x}:")
+        V_change = max(6, min(int(V_change), 8))
+        if change_voltage == 1:
+            V_target = input(f"enter V target for #{x}:")
+    else:
+        V_change = V_target
+        V_target = input(f"enter V target for #{x}:")
+    time_V_change = min(total_time_left, int(input(f"enter time of this V (up to {total_time_left}):")))
+    for i in range(int(time_V_change)):
+        changes.append(V_change)
+    total_time_left = total_time_left-time_V_change
+    if total_time_left == 0:
+        break
+if len(changes) < duration:
+    for i in range(duration-len(changes)):
+        changes.append(V_change)
+file_path = fr"C:\Users\bluma\OneDrive\inputs_{name}.txt"
+
+# פתיחת הקובץ במצב כתיבה וכתיבת הפרמטרים
+with open(file_path, 'w') as file:
+    file.write(f"{duration}\n")
+    file.write(f"{DC_duration}\n")
+    for i in range(len(changes)):
+        file.write(f"{changes[i]}\n")
+
+# # יצירת DataFrame עם הפרמטרים
+# data = 0#{'Parameter 1': [param1], 'Parameter 2': [param2], 'Parameter 3': [param3]}
+#
+# df = pd.DataFrame(data)
+#
+# # שמירת הנתונים לקובץ Excel
+# path = r"C:\Users\bluma\OneDrive\parameters.xlsx"
+# df.to_excel(path, index=False)
+
+print("the file was created!")
+v
